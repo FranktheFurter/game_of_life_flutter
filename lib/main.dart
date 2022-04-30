@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -37,6 +39,15 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   double _currentSliderValue = 20;
 
+  //create a 2d array with random boolean values
+  List<List<bool>> _grid = List<List<bool>>.generate(
+    100,
+    (i) => List<bool>.generate(
+      100,
+      (j) => Random().nextBool(),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     var iconSize = 24;
@@ -65,7 +76,11 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          Expanded(flex: 7, child: Container()),
+          SizedBox(
+            width: 500,
+            height: 500,
+            child: 
+          ),
           Container(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -73,6 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Padding(
                   padding: const EdgeInsets.all(32.0),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -83,20 +99,20 @@ class _MyHomePageState extends State<MyHomePage> {
                         ],
                       ),
                       SizedBox(height: 32),
+                      Text("Speed:"),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                        child: Slider(
-                          value: 10,
-                          label: _currentSliderValue.round().toString(),
-                          onChanged: (double value) {
-                            setState(() {
-                              _currentSliderValue = _currentSliderValue;
-                            });
-                          },
-                          min: 0,
-                          max: 100,
-                        ),
-                      )
+                          padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                          child: Slider(
+                            value: _currentSliderValue,
+                            max: 100,
+                            divisions: 10,
+                            label: _currentSliderValue.round().toString(),
+                            onChanged: (double value) {
+                              setState(() {
+                                _currentSliderValue = value;
+                              });
+                            },
+                          ))
                     ],
                   ),
                 ),
@@ -109,6 +125,4 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     ));
   }
-
-  blub() {}
 }
