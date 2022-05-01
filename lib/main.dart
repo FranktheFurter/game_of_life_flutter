@@ -76,10 +76,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          SizedBox(
-            width: 500,
-            height: 500,
-            child: 
+          CustomPaint(
+            size: Size(500, 500),
+            painter: MyPainter(_grid),
           ),
           Container(
             child: Column(
@@ -125,4 +124,37 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     ));
   }
+}
+
+//myPainter
+class MyPainter extends CustomPainter {
+  final List<List<bool>> _grid;
+
+  MyPainter(this._grid);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint = Paint()
+      ..color = Colors.white
+      ..strokeWidth = 0.1
+      ..style = PaintingStyle.stroke;
+    for (var i = 0; i < _grid.length; i++) {
+      for (var j = 0; j < _grid[i].length; j++) {
+        if (_grid[i][j]) {
+          canvas.drawRect(
+            Rect.fromLTWH(
+              i.toDouble() * 5,
+              j.toDouble() * 5,
+              5,
+              5,
+            ),
+            paint,
+          );
+        }
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => true;
 }
