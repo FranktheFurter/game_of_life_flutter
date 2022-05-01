@@ -136,8 +136,8 @@ class MyPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     var paint = Paint()
       ..color = Colors.white
-      ..strokeWidth = 0.1
-      ..style = PaintingStyle.stroke;
+      ..strokeWidth = 1
+      ..style = PaintingStyle.fill;
     for (var i = 0; i < _grid.length; i++) {
       for (var j = 0; j < _grid[i].length; j++) {
         if (_grid[i][j]) {
