@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -38,15 +39,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   double _currentSliderValue = 20;
+  bool _isRunning = false;
+  int _iterationCounter = 0;
 
   //create a 2d array with random boolean values
-  List<List<bool>> _grid = List<List<bool>>.generate(
-    100,
-    (i) => List<bool>.generate(
-      100,
-      (j) => Random().nextBool(),
-    ),
-  );
+  List<List<bool>> _grid = initializeGrid();
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // ),
         body: SafeArea(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
             padding: const EdgeInsets.all(32.0),
@@ -70,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       "Iteration: ",
                       style: TextStyle(color: Colors.white.withOpacity(0.50)),
                     ),
-                    Text('data')
+                    Text(_iterationCounter.toString())
                   ],
                 ),
               ),
@@ -92,9 +90,43 @@ class _MyHomePageState extends State<MyHomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          OutlinedButton(onPressed: () {}, child: Icon(Icons.play_arrow)),
-                          OutlinedButton(onPressed: () {}, child: Icon(Icons.pause)),
-                          OutlinedButton(onPressed: () {}, child: Icon(Icons.restore)),
+                          OutlinedButton(
+                              onPressed: () {
+                                setState(() {
+                                  _grid = nextIteration(_grid);
+                                  _iterationCounter++;
+                                });
+                                print("single step");
+                              },
+                              child: Icon(Icons.redo_rounded)),
+                          OutlinedButton(
+                              onPressed: () {
+                                setState(() {
+                                  _isRunning = !_isRunning;
+                                });
+                                Timer mytimer = Timer.periodic(Duration(milliseconds: (1000 / (_currentSliderValue + 1)).toInt()), (timer) {
+                                  if (!_isRunning) {
+                                    timer.cancel();
+                                  } else {
+                                    print("tick");
+                                    setState(() {
+                                      _grid = nextIteration(_grid);
+                                      _iterationCounter++;
+                                    });
+                                  }
+                                });
+
+                                print(_isRunning);
+                              },
+                              child: _isRunning ? Icon(Icons.pause) : Icon(Icons.play_arrow)),
+                          OutlinedButton(
+                              onPressed: () {
+                                setState(() {
+                                  _grid = initializeGrid();
+                                  _iterationCounter = 0;
+                                });
+                              },
+                              child: Icon(Icons.restore)),
                         ],
                       ),
                       SizedBox(height: 32),
@@ -126,6 +158,19 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+//Functions
+List<List<bool>> initializeGrid() {
+  List<List<bool>> _grid = List<List<bool>>.generate(
+    250,
+    (i) => List<bool>.generate(
+      250,
+      (j) => Random().nextBool(),
+    ),
+  );
+
+  return _grid;
+}
+
 class MyPainter extends CustomPainter {
   final List<List<bool>> _grid;
 
@@ -142,10 +187,10 @@ class MyPainter extends CustomPainter {
         if (_grid[i][j]) {
           canvas.drawRect(
             Rect.fromLTWH(
-              i.toDouble() * 5,
-              j.toDouble() * 5,
-              5,
-              5,
+              i.toDouble() * 2,
+              j.toDouble() * 2,
+              2,
+              2,
             ),
             paint,
           );
