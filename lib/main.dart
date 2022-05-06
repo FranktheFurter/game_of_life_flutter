@@ -66,7 +66,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: [
                     Text(
                       "Iteration: ",
-                      style: TextStyle(color: Colors.white.withOpacity(0.50)),
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.50),
+                      ),
                     ),
                     Text(_iterationCounter.toString())
                   ],
@@ -74,9 +76,18 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          CustomPaint(
-            size: Size(500, 500),
-            painter: MyPainter(_grid),
+          Expanded(
+            child: Center(
+              child: InteractiveViewer(
+                constrained: false,
+                minScale: 0.01,
+                maxScale: 25.0,
+                child: CustomPaint(
+                  size: Size(2000, 2000),
+                  painter: MyPainter(_grid),
+                ),
+              ),
+            ),
           ),
           Container(
             child: Column(
@@ -161,9 +172,9 @@ class _MyHomePageState extends State<MyHomePage> {
 //Functions
 List<List<bool>> initializeGrid() {
   List<List<bool>> _grid = List<List<bool>>.generate(
-    250,
+    1000,
     (i) => List<bool>.generate(
-      250,
+      1000,
       (j) => Random().nextBool(),
     ),
   );
