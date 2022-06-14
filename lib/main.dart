@@ -172,9 +172,9 @@ class _MyHomePageState extends State<MyHomePage> {
 //Functions
 List<List<bool>> initializeGrid() {
   List<List<bool>> _grid = List<List<bool>>.generate(
-    1000,
+    250,
     (i) => List<bool>.generate(
-      1000,
+      250,
       (j) => Random().nextBool(),
     ),
   );
@@ -198,10 +198,10 @@ class MyPainter extends CustomPainter {
         if (_grid[i][j]) {
           canvas.drawRect(
             Rect.fromLTWH(
-              i.toDouble() * 2,
-              j.toDouble() * 2,
-              2,
-              2,
+              i.toDouble() * 8,
+              j.toDouble() * 8,
+              8,
+              8,
             ),
             paint,
           );
